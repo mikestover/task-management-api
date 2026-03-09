@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TaskManagementApi.Models;
 
 namespace TaskManagementApi.Data
 {
@@ -18,7 +19,8 @@ namespace TaskManagementApi.Data
             modelBuilder.Entity<TaskItem>(entity =>
             {
                 entity.Property(e => e.Priority)
-                    .HasDefaultValue(Priority.Medium);
+                    .HasDefaultValue(Priority.Medium)
+                    .HasSentinel(Priority.Medium);
                     
                 entity.Property(e => e.IsCompleted)
                     .HasDefaultValue(false);

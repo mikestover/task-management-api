@@ -1,3 +1,5 @@
+namespace TaskManagementApi.Models;
+
 public class TaskItem
 {
     public int Id { get; set; }

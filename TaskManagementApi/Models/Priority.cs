@@ -1,6 +1,10 @@
-public enum Priority
+namespace TaskManagementApi.Models
 {
-    Low,
-    Medium,
-    High
+    public enum Priority
+    {
+        Low,
+        Medium,
+        High
+    }
 }
+

@@ -1,169 +1,98 @@
-You're right! Let's update the README to be more Railway-focused like your previous projects.
-
-Replace the `README.md` content with:
-
-```markdown
 # Task Management API
 
-A production-ready RESTful API for task management, built with ASP.NET Core and designed for Railway deployment.
-
-## 🚀 Quick Deploy to Railway
+A production-ready RESTful API for task management, built with ASP.NET Core and PostgreSQL. Designed for one-click Railway deployment.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
 
-### Prerequisites
-- Railway account ([Sign up here](https://railway.app))
-- GitHub account
+## Features
 
-### Deployment Steps
+- Full CRUD for tasks with validation (FluentValidation)
+- Filtering, sorting, search, and pagination
+- Priority levels (Low, Medium, High)
+- Auto-migration on startup
+- Health check endpoints (`/health`, `/health/ready`)
+- Swagger UI in all environments
+- Docker Compose for local development
 
-1. **Fork or clone this repository to your GitHub**
+## Tech Stack
 
-2. **Create a new project on Railway**
-   - Go to [Railway](https://railway.app)
-   - Click "New Project"
+- ASP.NET Core 9.0
+- PostgreSQL + Entity Framework Core
+- FluentValidation
+- Swagger/OpenAPI
 
-3. **Add PostgreSQL Database**
-   - Click "New"
-   - Select "Database"
-   - Choose "Add PostgreSQL"
-   - Railway will automatically set the `DATABASE_URL` environment variable
+## Deploy to Railway
 
-4. **Deploy the API**
-   - Click "New"
-   - Select "GitHub Repo"
-   - Choose this repository
-   - Railway will automatically detect the .NET project and deploy
+1. Click the **Deploy on Railway** button above
+2. Railway will provision a PostgreSQL database and deploy the API automatically
+3. Visit your app URL + `/swagger` to explore the API
 
-5. **Access your API**
-   - Once deployed, Railway provides a public URL
-   - Add `/swagger` to the URL to view API documentation
-   - Example: `https://your-app.railway.app/swagger`
+## Local Development
 
-### Automatic Features
-- ✅ Database migrations run automatically on startup
-- ✅ HTTPS enabled by default
-- ✅ Auto-scaling based on traffic
-- ✅ Swagger UI included for testing
+### With Docker (recommended)
 
-## 🛠️ Tech Stack
-
-- **Backend**: ASP.NET Core 9.0
-- **Database**: PostgreSQL with Entity Framework Core
-- **API Documentation**: Swagger/OpenAPI
-- **Hosting**: Railway
-
-## 📋 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/tasks` | Get all tasks |
-| GET | `/api/tasks/{id}` | Get task by ID |
-| POST | `/api/tasks` | Create new task |
-| PUT | `/api/tasks/{id}` | Update task |
-| DELETE | `/api/tasks/{id}` | Delete task |
-
-## 📝 Task Model
-
-```json
-{
-  "id": 1,
-  "title": "Complete project",
-  "description": "Finish the task management API",
-  "isCompleted": false,
-  "priority": "High",
-  "dueDate": "2024-12-31T00:00:00Z",
-  "createdAt": "2024-11-17T12:00:00Z",
-  "updatedAt": "2024-11-17T12:00:00Z"
-}
-```
-
-### Priority Levels
-- `Low` (0)
-- `Medium` (1)
-- `High` (2)
-
-## 🧪 Testing the API
-
-Once deployed, visit `https://your-app.railway.app/swagger` to:
-- View all available endpoints
-- Test API calls directly in the browser
-- See request/response schemas
-
-### Example: Create a Task
-
-**POST** `/api/tasks`
-
-```json
-{
-  "title": "Learn Railway deployment",
-  "description": "Deploy .NET API to Railway",
-  "priority": 1,
-  "dueDate": "2024-12-31T00:00:00Z"
-}
-```
-
-## 💻 Local Development
-
-### Prerequisites
-- .NET 9.0 SDK
-- PostgreSQL
-
-### Setup
-
-1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd task-management-api
+docker compose up --build
 ```
 
-2. Update `appsettings.json` with your local database connection
+API available at `http://localhost:8080/swagger`
 
-3. Run the application
+### Without Docker
+
+Prerequisites: .NET 9.0 SDK, PostgreSQL running locally
+
 ```bash
 cd TaskManagementApi
 dotnet run
 ```
 
-4. Navigate to `http://localhost:5088/swagger`
+Update `appsettings.json` with your local connection string if needed.
 
-## 🔧 Configuration
+## API Endpoints
 
-The app automatically detects Railway's `DATABASE_URL` environment variable. No additional configuration needed!
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/tasks` | List tasks (with filtering, sorting, pagination) |
+| GET | `/api/tasks/{id}` | Get task by ID |
+| POST | `/api/tasks` | Create task |
+| PUT | `/api/tasks/{id}` | Update task |
+| DELETE | `/api/tasks/{id}` | Delete task |
+| GET | `/health` | Health check |
 
-For local development, update the connection string in `appsettings.json`:
+### Query Parameters (GET /api/tasks)
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `pageNumber` | int | Page number (default: 1) |
+| `pageSize` | int | Items per page (default: 10) |
+| `isCompleted` | bool? | Filter by completion status |
+| `priority` | enum? | Filter by priority (Low, Medium, High) |
+| `dueDateFrom` | datetime? | Filter tasks due after this date |
+| `dueDateTo` | datetime? | Filter tasks due before this date |
+| `sortBy` | string? | Sort field (title, priority, duedate, iscompleted, updatedat, createdat) |
+| `sortDescending` | bool | Sort direction (default: true) |
+| `searchTerm` | string? | Search in title and description |
+
+### Example: Create a Task
 
 ```json
-"ConnectionStrings": {
-  "DefaultConnection": "Host=localhost;Database=taskmanagementdb;Username=postgres;Password=yourpassword"
+POST /api/tasks
+{
+  "title": "Learn Railway deployment",
+  "description": "Deploy .NET API to Railway",
+  "priority": 1,
+  "dueDate": "2026-12-31T00:00:00Z"
 }
 ```
 
-## 📦 Project Structure
+## Configuration
 
+Railway automatically sets `DATABASE_URL`. No manual configuration needed.
+
+For local development, the `docker-compose.yml` handles everything. For bare-metal, edit `appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Database=taskmanagementdb;Username=postgres;Password=postgres"
+}
 ```
-task-management-api/
-├── TaskManagementApi/
-│   ├── Controllers/
-│   │   └── TasksController.cs
-│   ├── Data/
-│   │   └── ApplicationDbContext.cs
-│   ├── Models/
-│   │   ├── TaskItem.cs
-│   │   └── Priority.cs
-│   ├── Migrations/
-│   ├── Program.cs
-│   └── appsettings.json
-└── README.md
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
-## 📄 License
-
-MIT License - feel free to use this project for learning or production.
-```
-
-This is much more Railway-focused with clear deployment instructions and better formatting!
