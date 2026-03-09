@@ -2,7 +2,7 @@
 
 A production-ready RESTful API for task management, built with ASP.NET Core and PostgreSQL. Designed for one-click Railway deployment.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/X5dHrE?referralCode=Ce0gB7&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
 ## Features
 
