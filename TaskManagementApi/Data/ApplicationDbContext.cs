@@ -11,6 +11,7 @@ namespace TaskManagementApi.Data
         }
 
         public DbSet<TaskItem> Tasks { get; set; }
+        public DbSet<Investment> Investments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +26,15 @@ namespace TaskManagementApi.Data
                 entity.Property(e => e.IsCompleted)
                     .HasDefaultValue(false);
                     
+                entity.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    
+                entity.Property(e => e.UpdatedAt)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            modelBuilder.Entity<Investment>(entity =>
+            {
                 entity.Property(e => e.CreatedAt)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
                     
